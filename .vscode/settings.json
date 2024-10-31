@@ -1,0 +1,12 @@
+{
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+    "cmake.configureOnOpen": false,
+    "cmake.deleteBuildDirOnCleanConfigure": true,
+    "cmake.ignoreCMakeListsMissing": true,
+    "C_Cpp.default.cppStandard": "gnu++23",
+    "C_Cpp.default.includePath": [
+        "${default}",
+        "${workspaceFolder}/include",
+        "D:\\Programs\\msys64\\mingw64\\include"
+    ]
+}

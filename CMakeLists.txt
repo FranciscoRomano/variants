@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.25 FATAL_ERROR)
+project(variants)
+add_executable(variants "${CMAKE_CURRENT_LIST_DIR}/src/example.cpp")
+set_property(TARGET variants PROPERTY CXX_STANDARD 23)
+target_include_directories(variants PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include")
