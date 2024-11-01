@@ -3,13 +3,10 @@
     "cmake.configureOnOpen": false,
     "cmake.deleteBuildDirOnCleanConfigure": true,
     "cmake.ignoreCMakeListsMissing": true,
+    "C_Cpp.default.compilerPath": "D:/Programs/msys64/mingw64/bin/g++.exe",
     "C_Cpp.default.cppStandard": "gnu++23",
     "C_Cpp.default.cStandard": "gnu23",
-    "C_Cpp.default.includePath": [
-        "${default}",
-        "${workspaceFolder}/include",
-        "D:\\Programs\\msys64\\mingw64\\include"
-    ],
+    "C_Cpp.default.includePath": [ "${default}", "${workspaceFolder}/include" ],
     "C_Cpp.enhancedColorization": "enabled",
     "workbench.panel.showLabels": false,
 }
