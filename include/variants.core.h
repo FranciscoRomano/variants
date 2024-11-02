@@ -75,7 +75,7 @@ namespace variant {
         template<class type> requires(is_value<type>) operator type() {
             type dst;
             decoder<type>::run(*this, dst);
-            return dst;
+            return (type&&)dst;
         }
         template<class type> requires(is_value<type>) value(type const & src) {
             encoder<type>::run(src, *this);
