@@ -24,50 +24,26 @@
 #pragma once
 #include "variants.core.h"
 
-INLINE_VARIANT_TYPE(void*)
-INLINE_VARIANT_TYPE(bool)
-INLINE_VARIANT_TYPE(char)
-INLINE_VARIANT_TYPE(float)
-INLINE_VARIANT_TYPE(double)
-INLINE_VARIANT_TYPE(int8_t)
-INLINE_VARIANT_TYPE(int16_t)
-INLINE_VARIANT_TYPE(int32_t)
-INLINE_VARIANT_TYPE(int64_t)
-INLINE_VARIANT_TYPE(decltype(nullptr))
-INLINE_VARIANT_TYPE(uint8_t)
-INLINE_VARIANT_TYPE(uint16_t)
-INLINE_VARIANT_TYPE(uint32_t)
-INLINE_VARIANT_TYPE(uint64_t)
+constexpr int8_t VALUE_TYPE_NONE = 0x00;
+constexpr int8_t VALUE_TYPE_I008 = 0x01;
+constexpr int8_t VALUE_TYPE_I016 = 0x02;
+constexpr int8_t VALUE_TYPE_I032 = 0x03;
+constexpr int8_t VALUE_TYPE_I064 = 0x04;
+constexpr int8_t VALUE_TYPE_U008 = 0x05;
+constexpr int8_t VALUE_TYPE_U016 = 0x06;
+constexpr int8_t VALUE_TYPE_U032 = 0x07;
+constexpr int8_t VALUE_TYPE_U064 = 0x08;
+constexpr int8_t VALUE_TYPE_F032 = 0x09;
+constexpr int8_t VALUE_TYPE_F064 = 0x10;
+constexpr int8_t VALUE_TYPE_BLOB = 0x11;
 
-namespace variant
-{
-    constexpr int8_t VALUE_TYPE_NONE = 0x00;
-    constexpr int8_t VALUE_TYPE_I008 = 0x01;
-    constexpr int8_t VALUE_TYPE_I016 = 0x02;
-    constexpr int8_t VALUE_TYPE_I032 = 0x03;
-    constexpr int8_t VALUE_TYPE_I064 = 0x04;
-    constexpr int8_t VALUE_TYPE_U008 = 0x05;
-    constexpr int8_t VALUE_TYPE_U016 = 0x06;
-    constexpr int8_t VALUE_TYPE_U032 = 0x07;
-    constexpr int8_t VALUE_TYPE_U064 = 0x08;
-    constexpr int8_t VALUE_TYPE_F032 = 0x09;
-    constexpr int8_t VALUE_TYPE_F064 = 0x10;
-    constexpr int8_t VALUE_TYPE_BLOB = 0x11;
+// -------------------------------------------------------------------------------------------------------------------------- //
 
-    template<class type> struct decoder<type*> {
-        inline static void run(value const & src, type* & dst) {
-            return decoder<void*>::run(src, (void * &)dst);
-        }
-    };
+#define INLINE_VARIANT_ENCODER(...)\
+DECLARE_VARIANT_ENCODER(__VA_ARGS__) DEFINE_VARIANT_ENCODER(__VA_ARGS__)
 
-    template<class type> struct encoder<type*> {
-        inline static void run(type* const & src, value & dst) {
-            return encoder<void*>::run((void * const &)src, dst);
-        }
-    };
-
-    template<class type> constexpr bool is_value<type*> = is_value<type>;
-}
+#define INLINE_VARIANT_DECODER(...)\
+DECLARE_VARIANT_DECODER(__VA_ARGS__) DEFINE_VARIANT_DECODER(__VA_ARGS__)
 
 // -------------------------------------------------------------------------------------------------------------------------- //
 
@@ -96,6 +72,23 @@ INLINE_VARIANT_ENCODER(void*)
     dst.size = 0;
     dst.blob = src;
     dst.type = VALUE_TYPE_BLOB;
+}
+
+namespace variant
+{
+    template<class type> struct decoder<type*> {
+        inline static constexpr bool exists = decoder<type>::exists;
+        inline static void run(value const & src, type* & dst) {
+            return decoder<void*>::run(src, (void * &)dst);
+        }
+    };
+
+    template<class type> struct encoder<type*> {
+        inline static constexpr bool exists = encoder<type>::exists;
+        inline static void run(type* const & src, value & dst) {
+            return encoder<void*>::run((void * const &)src, dst);
+        }
+    };
 }
 
 // -------------------------------------------------------------------------------------------------------------------------- //

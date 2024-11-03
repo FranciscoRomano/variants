@@ -24,45 +24,52 @@
 #pragma once
 #include <stdint.h>
 
-#define INLINE_VARIANT_TYPE(...)\
+#define DEFINE_VARIANT_DECODER(...)\
+inline void variant::decoder<__VA_ARGS__>::run(variant::value const & src, __VA_ARGS__ & dst)
+
+#define DEFINE_VARIANT_ENCODER(...)\
+inline void variant::encoder<__VA_ARGS__>::run(__VA_ARGS__ const & src, variant::value & dst)
+
+#define DECLARE_VARIANT_DECODER(...)\
 namespace variant {\
-    template<> constexpr bool is_value<__VA_ARGS__> = true;\
-    template<> struct encoder<__VA_ARGS__> {\
-        static void run(__VA_ARGS__ const & src, value & dst);\
-    };\
     template<> struct decoder<__VA_ARGS__> {\
-        static void run(value const & src, __VA_ARGS__ & dst);\
+        inline static constexpr bool exists = true;\
+        inline static void run(value const & src, __VA_ARGS__ & dst);\
     };\
 };
-#define INLINE_VARIANT_DECODER(...)\
-inline void variant::decoder<__VA_ARGS__>::run(variant::value const & src, __VA_ARGS__ & dst)
-#define INLINE_VARIANT_ENCODER(...)\
-inline void variant::encoder<__VA_ARGS__>::run(__VA_ARGS__ const & src, variant::value & dst)
+
+#define DECLARE_VARIANT_ENCODER(...)\
+namespace variant {\
+    template<> struct encoder<__VA_ARGS__> {\
+        inline static constexpr bool exists = true;\
+        inline static void run(__VA_ARGS__ const & src, value & dst);\
+    };\
+};
 
 namespace variant {
 
-    /// Represents a dispose system for heap allocated memory.
-    template<class type> struct dispose {
-        inline static void run(struct value & src) {}
-    };
+    /// Represents a heap memory release function/system.
+    static void free(struct value & src);
+
+    /// Represents a heap memory allocation function/system.
+    static void alloc(struct value & src, size_t const & size);
 
     /// Represents a decoder that converts values to C++ types.
     template<class type> struct decoder {
+        inline static constexpr bool exists = false;
         inline static void run(struct value const & src, type & dst) {}
     };
 
     /// Represents a encoder that converts C++ types to values.
     template<class type> struct encoder {
+        inline static constexpr bool exists = false;
         inline static void run(type const & src, struct value & dst) {}
     };
-
-    /// Evaluates to true if the specified C++ type is a value.
-    template<class type> constexpr bool is_value = false;
 
     /// Represents a union-based container for all value types.
     struct value final {
         int8_t       type; // The stored value type.
-        int64_t      size; // The allocated memory size.
+        size_t       size; // The allocated memory size.
         union {
             int8_t   i008; // A 8-bit signed integer type.
             int16_t  i016; // A 16-bit signed integer type.
@@ -77,19 +84,32 @@ namespace variant {
             void*    blob; // A incomplete type that points to memory.
         };
         value() = default;
-        ~value()
-        {
-            dispose<void>::run(*this);
-        }
-        template<class type> requires(is_value<type>) operator type() {
+        ~value() { free(*this); }
+        template<class type> requires(decoder<type>::exists) operator type() {
             type dst;
             decoder<type>::run(*this, dst);
             return (type&&)dst;
         }
-        template<class type> requires(is_value<type>) value(type const & src) {
+        template<class type> requires(encoder<type>::exists) value(type const & src) {
             encoder<type>::run(src, *this);
         }
     };
 }
 
+// -------------------------------------------------------------------------------------------------------------------------- //
+#ifndef VARIANT_ALLOCATOR
+
+#include <stdlib.h>
+inline static void variant::free(value & src)
+{
+    if (src.size) ::free(src.blob);
+    src.size = 0;
+}
+inline static void variant::alloc(value & src, size_t const & size)
+{
+    src.blob = src.size ? ::realloc(src.blob, size) : ::malloc(size);
+    src.size = size;
+}
+
+#endif//VARIANT_ALLOCATOR
 // -------------------------------------------------------------------------------------------------------------------------- //

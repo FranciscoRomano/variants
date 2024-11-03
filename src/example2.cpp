@@ -2,12 +2,7 @@
 #include <iostream>
 #include <variants.h>
 
-namespace variant
-{
-    constexpr uint8_t VALUE_TYPE_CSTR = 0x12;
-};
-
-INLINE_VARIANT_TYPE(std::string)
+constexpr uint8_t VALUE_TYPE_CSTR = 0x12;
 
 INLINE_VARIANT_DECODER(std::string)
 {
@@ -25,9 +20,8 @@ INLINE_VARIANT_DECODER(std::string)
 
 INLINE_VARIANT_ENCODER(std::string)
 {
-    dst.size = src.size() + 1;
     dst.type = VALUE_TYPE_CSTR;
-    dst.blob = malloc(dst.size);
+    variant::alloc(dst, src.size() + 1);
     memcpy(dst.blob, &src[0], dst.size);
 }
 
@@ -39,5 +33,5 @@ int main()
 
     printf("Decoding message...\n\n%s\n", &result[0]);
 
-    exit(EXIT_SUCCESS);
+    return 0;
 }
