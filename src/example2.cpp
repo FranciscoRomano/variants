@@ -14,10 +14,11 @@ INLINE_VARIANT_DECODER(std::string)
     switch (src.type)
     {
         case VALUE_TYPE_CSTR:
-            dst = (char*)src.blob;
+            dst.resize(src.size);
+            memcpy(&dst[0], src.blob, src.size);
             return;
         default:
-            dst = "ERROR";
+            dst = std::string("ERROR");
             return;
     }
 }
