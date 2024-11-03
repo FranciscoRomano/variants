@@ -9,3 +9,8 @@ project(example2)
 add_executable(example2 "${CMAKE_CURRENT_LIST_DIR}/src/example2.cpp")
 set_property(TARGET example2 PROPERTY CXX_STANDARD 23)
 target_include_directories(example2 PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include")
+
+project(example3)
+add_executable(example3 "${CMAKE_CURRENT_LIST_DIR}/src/example3.cpp")
+set_property(TARGET example3 PROPERTY CXX_STANDARD 23)
+target_include_directories(example3 PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include")

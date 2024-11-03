@@ -41,6 +41,11 @@ inline void variant::encoder<__VA_ARGS__>::run(__VA_ARGS__ const & src, variant:
 
 namespace variant {
 
+    /// Represents a dispose system for heap allocated memory.
+    template<class type> struct dispose {
+        inline static void run(struct value & src) {}
+    };
+
     /// Represents a decoder that converts values to C++ types.
     template<class type> struct decoder {
         inline static void run(struct value const & src, type & dst) {}
@@ -72,6 +77,10 @@ namespace variant {
             void*    blob; // A incomplete type that points to memory.
         };
         value() = default;
+        ~value()
+        {
+            dispose<void>::run(*this);
+        }
         template<class type> requires(is_value<type>) operator type() {
             type dst;
             decoder<type>::run(*this, dst);
