@@ -1,12 +1,12 @@
 {
     "cmake.buildDirectory": "${workspaceFolder}/build",
-    "cmake.configureOnOpen": false,
+    "cmake.buildTask": true,
+    "cmake.configureArgs": [ "-DCMAKE_C_COMPILER=gcc", "-DCMAKE_CXX_COMPILER=g++" ],
     "cmake.deleteBuildDirOnCleanConfigure": true,
+    "cmake.enableAutomaticKitScan": false,
     "cmake.ignoreCMakeListsMissing": true,
-    "C_Cpp.default.compilerPath": "D:/Programs/msys64/mingw64/bin/g++.exe",
-    "C_Cpp.default.cppStandard": "gnu++23",
-    "C_Cpp.default.cStandard": "gnu23",
-    "C_Cpp.default.includePath": [ "${default}", "${workspaceFolder}/include" ],
-    "C_Cpp.enhancedColorization": "enabled",
+    "cmake.ignoreKitEnv": true,
+    "cmake.showSystemKits": false,
+    "cmake.useVsDeveloperEnvironment": "never",
     "workbench.panel.showLabels": false,
 }
