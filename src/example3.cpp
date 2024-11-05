@@ -1,4 +1,5 @@
 #include <string>
+#include <string.h>
 #include <stdlib.h>
 #include <iostream>
 #define VARIANT_ALLOCATOR
