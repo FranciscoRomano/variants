@@ -23,6 +23,8 @@
 // -------------------------------------------------------------------------------------------------------------------------- //
 #pragma once
 #include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
 constexpr int8_t VARIANT_TYPE_NONE = 0x00; // A incomplete/empty type.
 constexpr int8_t VARIANT_TYPE_I008 = 0x01; // A 8-bit signed integer type.
@@ -60,8 +62,8 @@ namespace variant {
 
     /// Represents a union-based container for all value types.
     struct value {
-        size_t       size;
-        int8_t       type;
+        size_t       size = 0;
+        int8_t       type = 0;
         union {
             int8_t   i008;
             int16_t  i016;
@@ -535,8 +537,6 @@ template<class type> struct variant::encoder<type*> {
 #endif//WITHOUT_VARIANT_ENCODERS
 // -------------------------------------------------------------------------------------------------------------------------- //
 #ifndef WITHOUT_VARIANT_ALLOCATOR
-#include <stdlib.h>
-#include <string.h>
 
 inline void variant::memory::free(value & src) {
     if (src.size) ::free(src.blob);
