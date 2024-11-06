@@ -22,7 +22,7 @@ INLINE_VARIANT_DECODER(std::string)
 INLINE_VARIANT_ENCODER(std::string)
 {
     dst.type = VALUE_TYPE_CSTR;
-    variant::alloc(dst, src.size() + 1);
+    variant::memory::init(dst, src.size() + 1);
     memcpy(dst.blob, &src[0], dst.size);
 }
 
