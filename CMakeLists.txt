@@ -1,16 +1,15 @@
 cmake_minimum_required(VERSION 3.25 FATAL_ERROR)
+set(CMAKE_CXX_STANDARD 23)
+include_directories("${CMAKE_CURRENT_LIST_DIR}/include")
 
 project(example1)
 add_executable(example1 "${CMAKE_CURRENT_LIST_DIR}/src/example1.cpp")
-set_property(TARGET example1 PROPERTY CXX_STANDARD 23)
-target_include_directories(example1 PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include")
 
 project(example2)
 add_executable(example2 "${CMAKE_CURRENT_LIST_DIR}/src/example2.cpp")
-set_property(TARGET example2 PROPERTY CXX_STANDARD 23)
-target_include_directories(example2 PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include")
 
 project(example3)
 add_executable(example3 "${CMAKE_CURRENT_LIST_DIR}/src/example3.cpp")
-set_property(TARGET example3 PROPERTY CXX_STANDARD 23)
-target_include_directories(example3 PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include")
+
+enable_testing()
+add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/tests")
