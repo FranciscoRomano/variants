@@ -77,6 +77,19 @@ for (int i = 0; i < 10000; i++)\
 #define VARIANT_ENUM_uint64_t VARIANT_TYPE_U064
 #define VARIANT_MAXV_uint64_t UINT64_MAX
 
+struct Assert {
+    template<class type>
+    static void AreEqual(type a, variant::value b)
+    {
+        if (a != (type)b) throw std::runtime_error("Failed 'Assert.AreEqual'");
+    }
+    template<class type>
+    static void AreEqual(variant::value a, type b)
+    {
+        if ((type)a != b) throw std::runtime_error("Failed 'Assert.AreEqual'");
+    }
+};
+
 int main(int argc, char** argv)
 {
     // check 'bool' constructor
@@ -108,6 +121,49 @@ int main(int argc, char** argv)
 
     // check 'int64_t' constructor
     ASSERT_VARIANT(0, int64_t);
+
+    variant::value values[] = {
+        true,
+        (int8_t)-34,
+        (int16_t)-34,
+        (int32_t)-34,
+        (int64_t)-34,
+        (uint8_t)34,
+        (uint16_t)34,
+        (uint32_t)34,
+        (uint64_t)34,
+        34.0f,
+        34.0,
+        argv[0],
+        (void*)0,
+        nullptr
+    };
+    Assert::AreEqual(values[0x0], true);
+    Assert::AreEqual(values[0x1], true);
+    Assert::AreEqual(values[0x2], true);
+    Assert::AreEqual(values[0x3], true);
+    Assert::AreEqual(values[0x4], true);
+    Assert::AreEqual(values[0x5], true);
+    Assert::AreEqual(values[0x6], true);
+    Assert::AreEqual(values[0x7], true);
+    Assert::AreEqual(values[0x8], true);
+    Assert::AreEqual(values[0x9], true);
+    Assert::AreEqual(values[0xA], true);
+    Assert::AreEqual(values[0xB], true);
+    Assert::AreEqual(values[0xC], false);
+    Assert::AreEqual(values[0xD], false);
+
+    Assert::AreEqual(values[0x0], 1);
+    Assert::AreEqual(values[0x1], -34);
+    Assert::AreEqual(values[0x2], -34);
+    Assert::AreEqual(values[0x3], -34);
+    Assert::AreEqual(values[0x4], -34);
+    Assert::AreEqual(values[0x5], 34);
+    Assert::AreEqual(values[0x6], 34);
+    Assert::AreEqual(values[0x7], 34);
+    Assert::AreEqual(values[0x8], 34);
+    Assert::AreEqual(values[0x9], 34);
+    Assert::AreEqual(values[0xA], 34);
 
     return 0;
 }
