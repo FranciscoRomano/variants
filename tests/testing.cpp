@@ -125,15 +125,15 @@ int main(int argc, char** argv)
     variant::value values[] = {
         true,
         (int8_t)-34,
-        (int16_t)-34,
-        (int32_t)-34,
-        (int64_t)-34,
+        (int16_t)-3434,
+        (int32_t)-34343434,
+        (int64_t)-3434343434343434,
         (uint8_t)34,
-        (uint16_t)34,
-        (uint32_t)34,
-        (uint64_t)34,
-        34.0f,
-        34.0,
+        (uint16_t)3434,
+        (uint32_t)34343434,
+        (uint64_t)3434343434343434,
+        34567.0f,
+        3456789.0,
         argv[0],
         (void*)0,
         nullptr
@@ -155,15 +155,15 @@ int main(int argc, char** argv)
 
     Assert::AreEqual(values[0x0], 1);
     Assert::AreEqual(values[0x1], -34);
-    Assert::AreEqual(values[0x2], -34);
-    Assert::AreEqual(values[0x3], -34);
-    Assert::AreEqual(values[0x4], -34);
+    Assert::AreEqual(values[0x2], -3434);
+    Assert::AreEqual(values[0x3], -34343434);
+    Assert::AreEqual(values[0x4], -3434343434343434);
     Assert::AreEqual(values[0x5], 34);
-    Assert::AreEqual(values[0x6], 34);
-    Assert::AreEqual(values[0x7], 34);
-    Assert::AreEqual(values[0x8], 34);
-    Assert::AreEqual(values[0x9], 34);
-    Assert::AreEqual(values[0xA], 34);
+    Assert::AreEqual(values[0x6], 3434);
+    Assert::AreEqual(values[0x7], 34343434);
+    Assert::AreEqual(values[0x8], 3434343434343434);
+    Assert::AreEqual(values[0x9], 34567);
+    Assert::AreEqual(values[0xA], 3456789);
 
     return 0;
 }
